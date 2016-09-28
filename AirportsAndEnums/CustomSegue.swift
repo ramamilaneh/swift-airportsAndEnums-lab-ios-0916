@@ -16,8 +16,8 @@ class CustomSegue: UIStoryboardSegue {
         transition.duration = 0.5
         transition.type = kCATransitionFade
         
-        self.sourceViewController.view.window?.layer.addAnimation(transition, forKey: kCATransitionFade)
-        self.sourceViewController.presentViewController(self.destinationViewController, animated: false, completion: nil)
+        self.source.view.window?.layer.add(transition, forKey: kCATransitionFade)
+        self.source.present(self.destination, animated: false, completion: nil)
         
     }
 }

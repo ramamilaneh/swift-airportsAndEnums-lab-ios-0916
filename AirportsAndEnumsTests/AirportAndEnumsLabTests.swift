@@ -17,7 +17,7 @@ class ViewControllerSpec: QuickSpec {
     override func spec() {
         
         let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        let vc = mainStoryboard.instantiateViewControllerWithIdentifier("vcIdentifier") as! ViewController
+        let vc = mainStoryboard.instantiateViewController(withIdentifier: "vcIdentifier") as! ViewController
         vc.loadView()
         
         describe("airport code enum") {
