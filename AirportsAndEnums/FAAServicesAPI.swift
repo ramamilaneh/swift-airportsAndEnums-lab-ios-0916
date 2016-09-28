@@ -15,7 +15,7 @@ class FAAServicesAPI {
         let airportDict: NSMutableDictionary = [:]
         
         let group = DispatchGroup()
-        let queue = DispatchQueue.global(priority: DispatchQueue.GlobalQueuePriority.default)
+        let queue = DispatchQueue.global(qos: DispatchQoS.QoSClass.default)
         
         for airportCode in airportCodes {
             group.enter()
