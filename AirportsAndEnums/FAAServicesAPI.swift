@@ -10,75 +10,75 @@ import Foundation
 
 class FAAServicesAPI {
     
-    class func getAirportStatusForAirports(airportCodes: [String], completionHandler: (status: NSDictionary?) -> Void) {
+    class func getAirportStatusForAirports(_ airportCodes: [String], completionHandler: @escaping (_ status: NSDictionary?) -> Void) {
         
         let airportDict: NSMutableDictionary = [:]
         
-        let group = dispatch_group_create()
-        let queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
+        let group = DispatchGroup()
+        let queue = DispatchQueue.global(priority: DispatchQueue.GlobalQueuePriority.default)
         
         for airportCode in airportCodes {
-            dispatch_group_enter(group)
-            dispatch_async(queue, { 
+            group.enter()
+            queue.async(execute: { 
                 getStatusForAirport(airportCode, completionHandler: { status in
                     if let aStatus = status {
                         airportDict[aStatus.airportCode] = aStatus
                     }
-                    dispatch_group_leave(group)
+                    group.leave()
                 })
             })
         }
         
-        dispatch_group_notify(group, queue) {
+        group.notify(queue: queue) {
             if airportDict.count == airportCodes.count {
-                completionHandler(status: airportDict)
+                completionHandler(airportDict)
             } else {
-                completionHandler(status: nil)
+                completionHandler(nil)
             }
         }
     }
     
-    class func getStatusForAirport(airportCode: String, completionHandler: (status: AirportStatus?) -> Void) {
+    class func getStatusForAirport(_ airportCode: String, completionHandler: @escaping (_ status: AirportStatus?) -> Void) {
         
         let statusEndpoint = "http://services.faa.gov/airport/status/" + airportCode + "?format=application/json"
         
-        guard let url = NSURL(string: statusEndpoint) else {
+        guard let url = URL(string: statusEndpoint) else {
             print("Error: cannot create URL")
-            completionHandler(status: nil)
+            completionHandler(nil)
             return
         }
         
-        let urlRequest = NSURLRequest(URL: url)
+        let urlRequest = URLRequest(url: url)
         
-        let config = NSURLSessionConfiguration.defaultSessionConfiguration()
-        let session = NSURLSession(configuration: config)
+        let config = URLSessionConfiguration.default
+        let session = URLSession(configuration: config)
         
-        session.dataTaskWithRequest(urlRequest) { (data, response, error) in
+        session.dataTask(with: urlRequest, completionHandler: { (data, response, error) in
             
             if data == nil {
-                completionHandler(status: nil)
+                completionHandler(nil)
                 return
             }
             
             do {
-                if let status = try NSJSONSerialization.JSONObjectWithData(data!, options: []) as? [String: AnyObject] {
+                if let status = try JSONSerialization.jsonObject(with: data!, options: []) as? [String: AnyObject] {
                     
                     let airportStatus = AirportStatus(status: status)
                     if airportStatus.complete {
-                        completionHandler(status: airportStatus)
+                        completionHandler(airportStatus)
                     } else {
                         print("Error: data received is not valid")
-                        completionHandler(status: nil)
+                        completionHandler(nil)
                     }
                     
                 }
                 
             } catch {
                 print("Error: cannot get JSON data")
-                completionHandler(status: nil)
+                completionHandler(nil)
                 
             }
-        }.resume()
+        }) .resume()
         
     }
     

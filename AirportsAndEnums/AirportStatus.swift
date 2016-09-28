@@ -10,21 +10,21 @@ import Foundation
 
 class AirportStatus {
     
-    private(set) var airportCode: String
-    private(set) var city: String
-    private(set) var delay: String
-    private(set) var name: String
-    private(set) var state: String
-    private(set) var avgDelay: String
-    private(set) var type: String
-    private(set) var reason: String
-    private(set) var tempF: String
-    private(set) var tempFNum: Int
-    private(set) var visibility: String
-    private(set) var weather: String
-    private(set) var windSpeed: String
-    private(set) var windDirection: String
-    private(set) var complete = false
+    fileprivate(set) var airportCode: String
+    fileprivate(set) var city: String
+    fileprivate(set) var delay: String
+    fileprivate(set) var name: String
+    fileprivate(set) var state: String
+    fileprivate(set) var avgDelay: String
+    fileprivate(set) var type: String
+    fileprivate(set) var reason: String
+    fileprivate(set) var tempF: String
+    fileprivate(set) var tempFNum: Int
+    fileprivate(set) var visibility: String
+    fileprivate(set) var weather: String
+    fileprivate(set) var windSpeed: String
+    fileprivate(set) var windDirection: String
+    fileprivate(set) var complete = false
     
     init(status: [String: AnyObject]) {
         
@@ -66,7 +66,7 @@ extension AirportStatus {
         
         if tempF != "NO TEMPERATURE" {
 
-            let tempFSplit = tempF.characters.split(".")
+            let tempFSplit = tempF.characters.split(separator: ".")
             tempFNum = Int(String(tempFSplit.first!))!
             tempF = "\(tempFNum)" + "° F"
             
@@ -77,9 +77,9 @@ extension AirportStatus {
         }
         
         if windSpeed != "NO WIND SPEED" {
-            let windArray = windSpeed.componentsSeparatedByString(" ")
+            let windArray = windSpeed.components(separatedBy: " ")
             if let windVelocity = windArray.last {
-                let windVelocityArray = windVelocity.characters.split(".")
+                let windVelocityArray = windVelocity.characters.split(separator: ".")
                 windSpeed = String(windVelocityArray.first!) + "mph"
             }
             if let windAngle = windArray.first {
@@ -161,50 +161,50 @@ extension AirportStatus {
         let airportStatusDictionary: NSMutableDictionary = [:]
         
         let statusATL: [String: AnyObject] = [
-            "IATA": "ATL",
-            "city": "Atlanta",
-            "delay": "false",
-            "name": "Hartsfield-Jackson Atlanta International Airport",
-            "state": "Georgia",
-            "status": ["avgDelay" : "", "type": "", "reason": ""],
-            "weather": ["temp": "83.0 F (28.3 C)", "visibility": 10.00, "weather": "Mostly Cloudy", "wind": "North at 5.8mph"]]
+            "IATA": "ATL" as AnyObject,
+            "city": "Atlanta" as AnyObject,
+            "delay": "false" as AnyObject,
+            "name": "Hartsfield-Jackson Atlanta International Airport" as AnyObject,
+            "state": "Georgia" as AnyObject,
+            "status": ["avgDelay" : "", "type": "", "reason": ""] as AnyObject,
+            "weather": ["temp": "83.0 F (28.3 C)", "visibility": 10.00, "weather": "Mostly Cloudy", "wind": "North at 5.8mph"] as AnyObject]
         
         let statusDFW: [String: AnyObject] = [
-            "IATA": "DFW",
-            "city": "Dallas",
-            "delay": "true",
-            "name": "Dallas/Ft Worth International",
-            "state": "Texas",
-            "status": ["avgDelay" : "10 minutes", "type": "Departure", "reason": "TM Initiatives:STOP:RWY"],
-            "weather": ["temp": "83.0 F (28.3 C)", "visibility": 10.00, "weather": "A Few Clouds", "wind": "West at 10.4mph"]]
+            "IATA": "DFW" as AnyObject,
+            "city": "Dallas" as AnyObject,
+            "delay": "true" as AnyObject,
+            "name": "Dallas/Ft Worth International" as AnyObject,
+            "state": "Texas" as AnyObject,
+            "status": ["avgDelay" : "10 minutes", "type": "Departure", "reason": "TM Initiatives:STOP:RWY"] as AnyObject,
+            "weather": ["temp": "83.0 F (28.3 C)", "visibility": 10.00, "weather": "A Few Clouds", "wind": "West at 10.4mph"] as AnyObject]
         
         let statusJFK: [String: AnyObject] = [
-            "IATA": "JFK",
-            "city": "New York",
-            "delay": "false",
-            "name": "John F Kennedy International",
-            "state": "New York",
-            "status": ["avgDelay" : "", "type": "", "reason": ""],
-            "weather": ["temp": "81.0 F (27.2 C)", "visibility": 2.00, "weather": "Rain", "wind": "West at 15.0mph"]]
+            "IATA": "JFK" as AnyObject,
+            "city": "New York" as AnyObject,
+            "delay": "false" as AnyObject,
+            "name": "John F Kennedy International" as AnyObject,
+            "state": "New York" as AnyObject,
+            "status": ["avgDelay" : "", "type": "", "reason": ""] as AnyObject,
+            "weather": ["temp": "81.0 F (27.2 C)", "visibility": 2.00, "weather": "Rain", "wind": "West at 15.0mph"] as AnyObject]
         
         let statusLAX: [String: AnyObject] = [
             
-            "IATA": "LAX",
-            "city": "Los Angeles",
-            "delay": "true",
-            "name": "Los Angeles International",
-            "state": "California",
-            "status": ["avgDelay" : "20 minutes", "type": "Thunderstorms", "reason": "TSTMS"],
-            "weather": ["temp": "74.0 F (23.3 C)", "visibility": 1.00, "weather": "Thunderstorm", "wind": "West at 10.4mph"]]
+            "IATA": "LAX" as AnyObject,
+            "city": "Los Angeles" as AnyObject,
+            "delay": "true" as AnyObject,
+            "name": "Los Angeles International" as AnyObject,
+            "state": "California" as AnyObject,
+            "status": ["avgDelay" : "20 minutes", "type": "Thunderstorms", "reason": "TSTMS"] as AnyObject,
+            "weather": ["temp": "74.0 F (23.3 C)", "visibility": 1.00, "weather": "Thunderstorm", "wind": "West at 10.4mph"] as AnyObject]
         
         let statusORD: [String: AnyObject] = [
-            "IATA": "ORD",
-            "city": "Chicago",
-            "delay": "true",
-            "name": "Chicago OHare International",
-            "state": "Illinois",
-            "status": ["avgDelay" : "120 minutes", "type": "Emergency", "reason": "WX / EMERG"],
-            "weather": ["temp": "74.0 F (23.3 C)", "visibility": 8.00, "weather": "Funnel Cloud", "wind": "South at 50.5mph"]]
+            "IATA": "ORD" as AnyObject,
+            "city": "Chicago" as AnyObject,
+            "delay": "true" as AnyObject,
+            "name": "Chicago OHare International" as AnyObject,
+            "state": "Illinois" as AnyObject,
+            "status": ["avgDelay" : "120 minutes", "type": "Emergency", "reason": "WX / EMERG"] as AnyObject,
+            "weather": ["temp": "74.0 F (23.3 C)", "visibility": 8.00, "weather": "Funnel Cloud", "wind": "South at 50.5mph"] as AnyObject]
         
         let statusArray = [statusATL, statusDFW, statusJFK, statusLAX, statusORD]
     

@@ -41,9 +41,9 @@ class ViewController: UIViewController {
     @IBOutlet weak var visibilityStatusLabel: UILabel!
     
     // Enums
-    var feltTemp: FeltTemp = .None
+    var feltTemp: FeltTemp = .none
     var windDirection: WindDirection = .V
-    var weatherCondition: WeatherCondition = .None
+    var weatherCondition: WeatherCondition = .none
     var airportCode: AirportCode? {
         didSet {
             if let code = airportCode {
@@ -59,7 +59,7 @@ class ViewController: UIViewController {
     var airportDictionary: NSDictionary? {
         didSet {
             if let airportDict = airportDictionary {
-                let sortedKeys = (airportDict.allKeys as! [String]).sort(<)
+                let sortedKeys = (airportDict.allKeys as! [String]).sorted(by: <)
                 if let code = sortedKeys.first {
                     
                     airportCode = AirportCode(rawValue: code)
@@ -109,16 +109,16 @@ extension ViewController {
 
         mutating func next() {
             switch self {
-            case ATL:
-                self = DFW
-            case DFW:
-                self = JFK
-            case JFK:
-                self = LAX
-            case LAX:
-                self = ORD
-            case ORD:
-                self = ATL
+            case .ATL:
+                self = .DFW
+            case .DFW:
+                self = .JFK
+            case .JFK:
+                self = .LAX
+            case .LAX:
+                self = .ORD
+            case .ORD:
+                self = .ATL
             }
         }
         
@@ -127,12 +127,12 @@ extension ViewController {
     // Weather Condition Enum
     enum WeatherCondition: String {
         
-        case Cloudy, Fair, Fog, Smoke, Rain, Snow, Thunderstorm, Windy, Dust, Tornado, None
+        case cloudy, fair, fog, smoke, rain, snow, thunderstorm, windy, dust, tornado, none
         
-        static func getWeatherConditionFor(status: String) -> WeatherCondition {
+        static func getWeatherConditionFor(_ status: String) -> WeatherCondition {
             
             var weatherConditions: NSDictionary?
-            if let path = NSBundle.mainBundle().pathForResource("WeatherConditions", ofType: "plist") {
+            if let path = Bundle.main.path(forResource: "WeatherConditions", ofType: "plist") {
                 weatherConditions = NSDictionary(contentsOfFile: path)
             }
             if let conditions = weatherConditions {
@@ -140,36 +140,36 @@ extension ViewController {
                 for (key, value) in conditions {
                     
                     let condition = value as! NSArray
-                    if condition.containsObject(status) {
+                    if condition.contains(status) {
                         
-                        switch String(key) {
+                        switch String(describing: key) {
                         case "Cloudy":
-                            return .Cloudy
+                            return .cloudy
                         case "Fair":
-                            return .Fair
+                            return .fair
                         case "Fog":
-                            return .Fog
+                            return .fog
                         case "Smoke":
-                            return .Smoke
+                            return .smoke
                         case "Rain":
-                            return .Rain
+                            return .rain
                         case "Snow":
-                            return .Snow
+                            return .snow
                         case "Thunderstorm":
-                            return .Thunderstorm
+                            return .thunderstorm
                         case "Windy":
-                            return .Windy
+                            return .windy
                         case "Dust":
-                            return .Dust
+                            return .dust
                         case "Tornado":
-                            return .Tornado
+                            return .tornado
                         default:
-                            return .None
+                            return .none
                         }
                     }
                 }
             }
-            return .None
+            return .none
         }
         
     }
@@ -177,40 +177,40 @@ extension ViewController {
     // Felt Temperature Enum
     enum FeltTemp: Int { // depiction
         
-        case Cold, Cool, Warm, Hot, None
+        case cold, cool, warm, hot, none
         
         init(rawValue: Int) {
             switch rawValue {
             case Int.min..<30:
-                self = .Cold
+                self = .cold
             case 30...59:
-                self = .Cool
+                self = .cool
             case 60...85:
-                self = .Warm
+                self = .warm
             case let x where x > 85:
-                self = .Hot
+                self = .hot
             default:
-                self = .None
+                self = .none
             }
         }
         
         var color: UIColor {
             switch self {
-            case .Cold: return UIColor.blueColor().colorWithAlphaComponent(0.5)
-            case .Cool: return UIColor.cyanColor().colorWithAlphaComponent(0.5)
-            case .Warm: return UIColor.orangeColor().colorWithAlphaComponent(0.5)
-            case .Hot: return UIColor.redColor().colorWithAlphaComponent(0.5)
-            case .None: return UIColor.clearColor()
+            case .cold: return UIColor.blue.withAlphaComponent(0.5)
+            case .cool: return UIColor.cyan.withAlphaComponent(0.5)
+            case .warm: return UIColor.orange.withAlphaComponent(0.5)
+            case .hot: return UIColor.red.withAlphaComponent(0.5)
+            case .none: return UIColor.clear
             }
         }
         
         var description: String {
             switch self {
-            case .Cold: return "COLD"
-            case .Cool: return "COOL"
-            case .Warm: return "WARM"
-            case .Hot: return "HOT"
-            case .None: return ""
+            case .cold: return "COLD"
+            case .cool: return "COOL"
+            case .warm: return "WARM"
+            case .hot: return "HOT"
+            case .none: return ""
             }
         }
         
@@ -281,7 +281,7 @@ extension ViewController {
     func setUpView() {
         
         let leftSwipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(ViewController.handleSwipes(_:)))
-        leftSwipeGesture.direction = .Left
+        leftSwipeGesture.direction = .left
         view.addGestureRecognizer(leftSwipeGesture)
         
         self.conditionColorView.layer.cornerRadius = 8
@@ -294,7 +294,7 @@ extension ViewController {
 extension ViewController {
     
     // Handle left swipe gesture
-    func handleSwipes(sender: UISwipeGestureRecognizer) {
+    func handleSwipes(_ sender: UISwipeGestureRecognizer) {
         changeStatusWithAnimation()
     }
     
@@ -302,7 +302,7 @@ extension ViewController {
     func changeStatusWithAnimation() {
         if statusReceived {
             airportCode?.next()
-            UIView.transitionWithView(view, duration: 0.5, options: .TransitionFlipFromRight, animations: nil, completion: nil)
+            UIView.transition(with: view, duration: 0.5, options: .transitionFlipFromRight, animations: nil, completion: nil)
         }
     }
     
@@ -350,8 +350,8 @@ extension ViewController {
     }
     
     func rotateWindCompassUsing(windDirection wd: WindDirection) {
-        windDirectionIcon.transform = CGAffineTransformIdentity
-        windDirectionIcon.transform = CGAffineTransformMakeRotation(CGFloat(wd.radians))
+        windDirectionIcon.transform = CGAffineTransform.identity
+        windDirectionIcon.transform = CGAffineTransform(rotationAngle: CGFloat(wd.radians))
     }
     
     func setConditionViewElementsFrom(feltTemp ft:FeltTemp, condition c:WeatherCondition) {
